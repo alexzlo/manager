@@ -17,4 +17,8 @@ export class UsersService {
       })
     );
   }
+
+  createNewUser(user: User): Observable<any> {
+    return this.http.post(`http://localhost:3000/users`, user);
+  }
 }
