@@ -10,6 +10,7 @@ import { PlanningPageComponent } from './planning-page/planning-page.component';
 import { RecordsPageComponent } from './records-page/records-page.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
+import { DropdownDirective } from './shared/directives/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SidebarComponent } from './shared/components/sidebar/sidebar.component'
     RecordsPageComponent,
     HeaderComponent,
     SidebarComponent,
+    DropdownDirective,
   ],
   imports: [
     CommonModule,
