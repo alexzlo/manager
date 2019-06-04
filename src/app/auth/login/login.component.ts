@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
     });
-    // console.log(this.usersService.getUserByEmail('wfm@mail.ru').subscribe(some => console.log(some)));
   }
 
   private showMessage(text: string, type: string = 'danger') {
