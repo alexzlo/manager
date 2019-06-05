@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BillService} from '../shared/services/bill.service';
 import {combineLatest, Subscription} from 'rxjs';
+
+import {BillService} from '../shared/services/bill.service';
 
 
 @Component({

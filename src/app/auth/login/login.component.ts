@@ -29,9 +29,7 @@ export class LoginComponent implements OnInit {
     this.massage = new MassageModel('danger', '');
 
     this.route.queryParams.subscribe((params: Params) => {
-      console.log(params);
       if (params.nowCanLogin) {
-        console.log('show');
         this.showMessage({
           text: 'Now you can login to system',
           type: 'success'
