@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {combineLatest, Subscription} from 'rxjs';
 
 import {BillService} from '../shared/services/bill.service';
+import {BillModel} from '../shared/models/bill.model';
 
 
 @Component({
@@ -14,21 +15,33 @@ export class BillPageComponent implements OnInit, OnDestroy {
   constructor(private billService: BillService) {
   }
 
-  subscription: Subscription;
-
-
-
+  sub1: Subscription;
+  sub2: Subscription;
+  currency: any;
+  bill: BillModel;
+  isLoaded = false; // load now data?
 
   ngOnInit() {
-     this.subscription = combineLatest(
+    this.sub1 = combineLatest(
       this.billService.getBill(),
       this.billService.getCurrency()
-     ).subscribe((result => console.log(result)));
+    ).subscribe((result: [BillModel, any]) => {
+      this.bill = result[0];
+      this.currency = result[1];
+      this.isLoaded = true;
+    });
+  }
+
+  onRefresh() {
+    this.isLoaded = false;
+    this.sub2 = this.billService.getCurrency().subscribe((currency: any) => {
+      this.currency = currency;
+      this.isLoaded = true;
+    });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.sub1.unsubscribe();
+    this.sub2.unsubscribe();
   }
-
-
 }
