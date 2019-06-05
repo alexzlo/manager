@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {CategoriesService} from '../../shared/services/categories.service';
+import {CategoryModel} from '../../shared/models/category.model';
 
 @Component({
   selector: 'app-add-category',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddCategoryComponent implements OnInit {
 
-  constructor() { }
+  @Output() onCategoryAdd = new EventEmitter<CategoryModel>();
+
+  constructor(private categoriesService: CategoriesService) {
+  }
 
   ngOnInit() {
   }
 
+  onSubmit(form: NgForm) {
+    let {name, capacity} = form.value;
+    if (capacity < 0) {
+      capacity *= -1;
+    }
+    const category = new CategoryModel(name, capacity);
+
+    this.categoriesService.addCategory(category).subscribe((category: CategoryModel) => {
+      form.reset();
+      form.form.patchValue({capacity: 1});
+      this.onCategoryAdd.emit(category);
+    });
+  }
 }
