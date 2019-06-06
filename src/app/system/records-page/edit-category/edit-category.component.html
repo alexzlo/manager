@@ -6,10 +6,18 @@
   </div>
   <div class="card-block">
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="alert-{{message.type}} alert" *ngIf="message.text">{{message.text}}</div>
       <div class="form-group">
         <label class="control-label" for="e-select-category">Enter the category</label>
-        <select class="form-control" id="e-select-category">
-          <option>1</option>
+        <select class="form-control"
+                id="e-select-category"
+                [(ngModel)]="currentCategoryId"
+                (change)="onCategoryChange()"
+                [ngModelOptions]="{standalone: true}"
+        >
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{category.name}}
+          </option>
         </select>
       </div>
       <div class="form-group"
@@ -22,7 +30,7 @@
                required
                #name="ngModel"
                name="name"
-               ngModel
+               [ngModel]="currentCategory.name"
         >
         <span class="form-help-text"
               *ngIf="name.invalid && name.touched"
@@ -39,7 +47,7 @@
                required
                #capacity="ngModel"
                name="capacity"
-               [ngModel]="1"
+               [ngModel]="currentCategory.capacity"
                min="1"
         >
         <span class="form-help-text"
@@ -47,7 +55,7 @@
         >Empty field
         </span>
       </div>
-      <button type="submit" class="btn btn-primary">Enter</button>
+      <button type="submit" class="btn btn-primary" [disabled]="f.invalid">Edit</button>
     </form>
   </div>
 </div>
