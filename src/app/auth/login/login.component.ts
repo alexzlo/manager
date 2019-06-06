@@ -1,21 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+
 import {UsersService} from '../../shared/services/users.service';
 import {User} from '../../shared/models/user.models';
 import {MassageModel} from '../../shared/models/massage.model';
 import {AuthService} from '../../shared/services/auth.service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {Message} from '@angular/compiler/src/i18n/i18n_ast';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   massage: MassageModel;
+
+  sub1: Subscription;
+  sub2: Subscription;
 
   constructor(
     private usersService: UsersService,
@@ -28,7 +33,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.massage = new MassageModel('danger', '');
 
-    this.route.queryParams.subscribe((params: Params) => {
+    this.sub1 = this.route.queryParams.subscribe((params: Params) => {
       if (params.nowCanLogin) {
         this.showMessage({
           text: 'Now you can login to system',
@@ -51,7 +56,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     const formData = this.form.value;
-    this.usersService.getUserByEmail(formData.email)
+    this.sub2 = this.usersService.getUserByEmail(formData.email)
       .subscribe((user: User) => {
         if (user) {
           if (user.password === formData.password) {
@@ -72,7 +77,15 @@ export class LoginComponent implements OnInit {
           });
         }
       });
-    // this.form.reset();
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub1) {
+      this.sub1.unsubscribe();
+    }
+    if (this.sub2) {
+      this.sub2.unsubscribe();
+    }
   }
 
 }
